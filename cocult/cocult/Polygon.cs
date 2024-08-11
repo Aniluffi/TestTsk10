@@ -81,11 +81,11 @@ namespace cocult
         /// <returns>строку</returns>
         public override string ToString()
         {
-            string str = "Многоугольник \n";
+            string str = "Многоугольник ";
 
             foreach (var el in _polygonVertex)
             {
-               str += el.ToString() + "\n";
+               str += el.ToString();
             }
             return str;
         }

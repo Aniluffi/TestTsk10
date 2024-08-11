@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.PortableExecutable;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using cocult.Comands;
 
 namespace cocult
@@ -16,6 +18,11 @@ namespace cocult
         /// список для хранения данных о введенных фигурах 
         /// </summary>
         private ListFigure<Figure> listEnteredShapes = new ListFigure<Figure>();
+
+        /// <summary>
+        /// путь к файлу с введенными фигурами
+        /// </summary>
+        private string path = @"C:\Users\aleks\Desktop\Практика\cocult\список введенных фигур.txt";
 
         /// <summary>
         /// лист для хранения команд
@@ -35,9 +42,10 @@ namespace cocult
         /// </summary>
         public void Run()
         {
+            ReaderFile(path);
             while (true)
-            {
-                Console.WriteLine("\n1 - квадрат, вводим сторону одну" +
+            {       
+                Console.WriteLine($"\n1 - квадрат, вводим сторону одну" +
                     "\n2 - прямоугольник, вводим два стороны" +
                     "\n3 - Круг, вводим радиус" +
                     "\n4 - треугольник, вводим три стороны" +
@@ -71,6 +79,7 @@ namespace cocult
                     words = comand.Split(" ", 1);
                     SearhComand(words[0], "");
                 }
+                WriteFile(listEnteredShapes,path);
             }
         }
         /// <summary>
@@ -92,20 +101,25 @@ namespace cocult
             Console.WriteLine("Ошибка в записи команды");
         }
 
+        /// <summary>
+        /// метод для преобразования строки в параметры для фигур
+        /// </summary>
+        /// <param name="parametr"></param>
+        /// <returns></returns>
         public static List<int> ToParametrs(string parametr)
         {
             string[] a = parametr.Split();
             List<int> parametrs = new List<int>();
 
-            foreach(var c in a)
+            foreach (var c in a)
             {
-                
-                if (int.TryParse(c,out int d))
+
+                if (int.TryParse(c, out int d))
                 {
                     parametrs.Add(Convert.ToInt32(c));
                 }
             }
-            
+
             return parametrs;
         }
 
@@ -135,6 +149,48 @@ namespace cocult
             _comands.Add(new ComandExit());
         }
 
+        /// <summary>
+        /// метод для получения данных с файла о введенных фигурах
+        /// </summary>
+        /// <param name="path">путь к файлу</param>
+        /// <returns>данные</returns>
+        public void ReaderFile(string path)
+        {
+            using (StreamReader fs = new StreamReader(path))
+            {
+                ListFigure<Figure> list = new ListFigure<Figure>();
+                string line;
+                while ((line = fs.ReadLine()) != null)
+                {
+                    string[] words = line.Split(" ", 2);
+                   CreateFigure(words[0], words[1]);
+                }
+            }
 
+        }
+
+        private void CreateFigure(string figur, string parametrs)
+        {
+                if (figur.ToLower() == _comands.OfType<ComandCircle>().FirstOrDefault().NameComand) listEnteredShapes.Add(new Circle(ToParametrs(parametrs)));
+                if(figur.ToLower() == _comands.OfType<ComandPolygon>().FirstOrDefault().NameComand) listEnteredShapes.Add( new Polygon(ToParametrs(parametrs)));
+                if (figur.ToLower() == _comands.OfType<ComandTringle>().FirstOrDefault().NameComand) listEnteredShapes.Add(new Triangle(ToParametrs(parametrs)));
+                if (figur.ToLower() == _comands.OfType<ComandSquare>().FirstOrDefault().NameComand) listEnteredShapes.Add(new Square(ToParametrs(parametrs)));
+                if(figur.ToLower() == _comands.OfType<ComandRectangle>().FirstOrDefault().NameComand) listEnteredShapes.Add( new Rectangle(ToParametrs(parametrs)));          
+        }
+
+        /// <summary>
+        /// метод для записи данных в файл
+        /// </summary>
+        /// <param name="n">лист с которого читаются данные</param>
+        public void WriteFile(ListFigure<Figure> n,string path)
+        {
+            using (StreamWriter fs = new StreamWriter(path))
+            {
+               foreach(var el in listEnteredShapes)
+                {
+                    fs.WriteLine(el.ToString());
+                }
+            }
+        }
     }
 }

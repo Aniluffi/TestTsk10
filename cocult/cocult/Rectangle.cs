@@ -63,7 +63,7 @@ namespace cocult
         /// </summary>
         public override string ToString()
         {
-            return $"Прямоугольник \nA = {A}; B = {B};";
+            return $"Прямоугольник A = {A} B = {B}";
         }
     }
 }

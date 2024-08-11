@@ -53,7 +53,7 @@ namespace cocult
         /// </summary>
         public override string ToString()
         {
-            return $"Круг \nR = {R};";
+            return $"Круг R = {R}";
         }
     }
 }

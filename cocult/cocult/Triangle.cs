@@ -83,7 +83,7 @@ namespace cocult
         /// </summary>
         public override string ToString()
         {
-            return $"Треугольник \nA = {A}; \nB = {B}; \nC = {C}";
+            return $"Треугольник A = {A} B = {B} C = {C}";
         }
     }
 }

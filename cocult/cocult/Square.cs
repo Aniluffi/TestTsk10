@@ -53,7 +53,7 @@ namespace cocult
         /// </summary>
         public override string ToString()
         {
-           return $"Квадрат \nA = {A};";
+           return $"Квадрат A = {A}";
         }
     }
 }

@@ -37,7 +37,7 @@ namespace cocult
         /// <returns>строку</returns>
         public override string ToString()
         {
-            return $"({X};{Y})";
+            return $"( {X} ; {Y} )";
         }
     }
 }
